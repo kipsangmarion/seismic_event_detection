@@ -2,7 +2,7 @@
 features/pca_features.py
 Method 3 (Automatic): PCA on padded/truncated raw waveform vectors.
 
-No domain knowledge is used — PCA finds the directions of maximum variance
+No domain knowledge is used - PCA finds the directions of maximum variance
 across all waveforms. The top components capture patterns a human might
 not think to hand-engineer.
 

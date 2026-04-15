@@ -12,8 +12,8 @@ Columns in features.csv:
 Labels: 1 = earthquake, 0 = noise
 
 Also saves:
-  models/scaler.pkl     — fitted StandardScaler (reuse in Milestone 2)
-  models/pca_model.pkl  — fitted PCA model      (reuse in Milestone 2)
+  models/scaler.pkl     - fitted StandardScaler (reuse in Milestone 2)
+  models/pca_model.pkl  - fitted PCA model      (reuse in Milestone 2)
 """
 
 import os
