@@ -109,16 +109,21 @@ def main():
 
     df = pd.DataFrame(rows)
 
-    # Outlier removal — Z-score on max_amplitude > 3 std flags contaminated noise windows
-    z_scores     = (df["max_amplitude"] - df["max_amplitude"].mean()) / df["max_amplitude"].std()
-    outlier_mask = z_scores.abs() > 3
+    # Outlier removal — IQR method on max_amplitude.
+    # More robust than Z-score for right-skewed amplitude distributions.
+    # Flags samples where max_amplitude > Q3 + 3*IQR (conservative upper fence).
+    q1, q3      = df["max_amplitude"].quantile(0.25), df["max_amplitude"].quantile(0.75)
+    iqr         = q3 - q1
+    upper_fence = q3 + 3 * iqr
+    outlier_mask = df["max_amplitude"] > upper_fence
     outliers     = df[outlier_mask]
 
     if len(outliers) > 0:
-        print(f"\n[outliers] Removing {len(outliers)} sample(s) with |Z-score| > 3 on max_amplitude:")
+        print(f"\n[outliers] IQR fence = {upper_fence:.1f}  (Q3={q3:.1f}, IQR={iqr:.1f})")
+        print(f"[outliers] Removing {len(outliers)} sample(s):")
         for _, row in outliers.iterrows():
             label_str = "earthquake" if row["label"] == 1 else "noise"
-            print(f"  {row['filename']}  ({label_str},  max_amplitude={row['max_amplitude']:.1f},  Z={z_scores[row.name]:.1f})")
+            print(f"  {row['filename']}  ({label_str},  max_amplitude={row['max_amplitude']:.1f})")
         df = df[~outlier_mask].reset_index(drop=True)
     else:
         print("\n[outliers] No outliers detected.")
