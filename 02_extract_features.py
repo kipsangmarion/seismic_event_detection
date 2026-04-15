@@ -31,7 +31,7 @@ load_dotenv()
 EARTHQUAKE_DIR  = os.getenv("EARTHQUAKE_DIR", "data/earthquake")
 NOISE_DIR       = os.getenv("NOISE_DIR", "data/noise")
 FEATURES_FILE   = os.getenv("FEATURES_FILE", "features.csv")
-WAVEFORM_LENGTH = int(os.getenv("WAVEFORM_LENGTH", 6000))
+WAVEFORM_LENGTH = int(os.getenv("WAVEFORM_LENGTH", 30000))
 PCA_COMPONENTS  = int(os.getenv("PCA_COMPONENTS", 50))
 MODELS_DIR      = "models"
 
