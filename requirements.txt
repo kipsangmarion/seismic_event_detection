@@ -1,0 +1,6 @@
+obspy
+numpy
+scipy
+matplotlib
+scikit-learn
+python-dotenv
