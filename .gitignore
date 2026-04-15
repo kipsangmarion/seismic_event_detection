@@ -3,6 +3,7 @@
 
 # Data files
 data/
+models/
 *.mseed
 *.xml
 
@@ -10,6 +11,7 @@ data/
 *.pdf
 *.png
 *.csv
+*.pkl
 
 # Python
 __pycache__/
