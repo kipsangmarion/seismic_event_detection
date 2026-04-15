@@ -221,6 +221,43 @@ def plot_feature_histograms(df):
     print(f"[saved] {out_path}")
 
 
+# Plot 4: Spectral Feature Scatter
+def plot_spectral_scatter(df):
+    x_col = "energy_1p0_5p0hz"   # core seismic detection band
+    y_col = "energy_0p1_1p0hz"   # surface wave / long-period band
+
+    if x_col not in df.columns or y_col not in df.columns:
+        print("[skip] Spectral columns not found in features.csv — skipping spectral scatter.")
+        return
+
+    eq    = df[df["label"] == 1]
+    noise = df[df["label"] == 0]
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # Use log scale — spectral energy spans many orders of magnitude
+    x_eq    = np.log10(eq[x_col].clip(lower=1))
+    y_eq    = np.log10(eq[y_col].clip(lower=1))
+    x_noise = np.log10(noise[x_col].clip(lower=1))
+    y_noise = np.log10(noise[y_col].clip(lower=1))
+
+    ax.scatter(x_noise, y_noise,
+               c=COLOR_NOISE, label="Noise", alpha=0.6, s=30, edgecolors="none")
+    ax.scatter(x_eq,    y_eq,
+               c=COLOR_EQ,    label="Earthquake", alpha=0.6, s=30, edgecolors="none")
+
+    ax.set_xlabel("log₁₀ Energy: 1–5 Hz band (core seismic)", fontsize=12)
+    ax.set_ylabel("log₁₀ Energy: 0.1–1 Hz band (surface waves)", fontsize=12)
+    ax.set_title("Spectral Feature Scatter: Earthquake vs Noise", fontsize=14, fontweight="bold")
+    ax.legend(fontsize=11)
+    ax.grid(True, linestyle="--", alpha=0.4)
+
+    out_path = os.path.join(VIZ_DIR, "04_spectral_scatter.png")
+    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"[saved] {out_path}")
+
+
 # Main
 def main():
     os.makedirs(VIZ_DIR, exist_ok=True)
@@ -241,6 +278,9 @@ def main():
 
     print("Generating feature histograms ...")
     plot_feature_histograms(df)
+
+    print("Generating spectral feature scatter ...")
+    plot_spectral_scatter(df)
 
     print(f"\nAll visualizations saved to {VIZ_DIR}/")
 
