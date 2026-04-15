@@ -40,6 +40,7 @@ NOISE_WINDOW_SEC   = WAVEFORM_PRE_SEC + WAVEFORM_POST_SEC  # 300 s, same length 
 EARTHQUAKE_DIR     = os.getenv("EARTHQUAKE_DIR", "data/earthquake")
 NOISE_DIR          = os.getenv("NOISE_DIR", "data/noise")
 CATALOG_FILE       = os.getenv("CATALOG_FILE", "earthquake_catalog.xml")
+NOISE_BUFFER_SEC   = int(os.getenv("NOISE_BUFFER_SEC", 600))  # ±10 min around any event
 
 TARGET_EARTHQUAKE  = 200   # stop early once we have this many
 TARGET_NOISE       = 200
@@ -130,12 +131,34 @@ def download_earthquakes(client, catalog):
 
 
 # Phase 1c: Download noise waveforms
-def download_noise(client):
+def build_event_times(catalog):
+    """Extract all origin times from a catalog as a sorted list."""
+    times = []
+    for event in catalog:
+        try:
+            times.append(event.origins[0].time)
+        except Exception:
+            continue
+    return sorted(times)
+
+
+def is_near_event(t, event_times, buffer_sec):
+    """Return True if time t falls within buffer_sec of any event in event_times."""
+    for et in event_times:
+        if abs(t - et) <= buffer_sec:
+            return True
+    return False
+
+
+def download_noise(client, catalog):
     existing = count_existing(NOISE_DIR, "noise_")
     if existing >= TARGET_NOISE:
         print(f"[noise] Already have {existing} files — skipping.")
         return
 
+    event_times = build_event_times(catalog)
+    print(f"[noise] Filtering against {len(event_times)} catalog events "
+          f"(±{NOISE_BUFFER_SEC}s buffer).")
     print(f"[noise] Starting downloads (have {existing}, target {TARGET_NOISE}) ...")
 
     # Sample from the full date range to match earthquake windows
@@ -157,6 +180,10 @@ def download_noise(client):
         if os.path.exists(out_path):
             downloaded += 1
             idx += 1
+            continue
+
+        if is_near_event(t, event_times, NOISE_BUFFER_SEC):
+            print(f"  [skip] noise at {t.date}: too close to a known event")
             continue
 
         try:
@@ -194,7 +221,7 @@ def main():
     print()
     download_earthquakes(client, catalog)
     print()
-    download_noise(client)
+    download_noise(client, catalog)
 
     print("\n" + "=" * 60)
     eq_count    = count_existing(EARTHQUAKE_DIR, "event_")

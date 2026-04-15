@@ -108,6 +108,21 @@ def main():
             row[col_name] = col_values[i]
 
     df = pd.DataFrame(rows)
+
+    # Outlier removal — Z-score on max_amplitude > 3 std flags contaminated noise windows
+    z_scores     = (df["max_amplitude"] - df["max_amplitude"].mean()) / df["max_amplitude"].std()
+    outlier_mask = z_scores.abs() > 3
+    outliers     = df[outlier_mask]
+
+    if len(outliers) > 0:
+        print(f"\n[outliers] Removing {len(outliers)} sample(s) with |Z-score| > 3 on max_amplitude:")
+        for _, row in outliers.iterrows():
+            label_str = "earthquake" if row["label"] == 1 else "noise"
+            print(f"  {row['filename']}  ({label_str},  max_amplitude={row['max_amplitude']:.1f},  Z={z_scores[row.name]:.1f})")
+        df = df[~outlier_mask].reset_index(drop=True)
+    else:
+        print("\n[outliers] No outliers detected.")
+
     df.to_csv(FEATURES_FILE, index=False)
 
     print(f"\nSaved {len(df)} rows x {len(df.columns)} columns → {FEATURES_FILE}")
