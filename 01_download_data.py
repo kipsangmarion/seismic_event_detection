@@ -3,7 +3,7 @@
 
 Downloads raw seismic waveforms from IRIS for two classes:
   - Earthquake: 5-min windows around known USGS events
-  - Noise:      5-min windows at random times with no known events
+  - Noise: 5-min windows at random times with no known events
 
 Outputs:
   data/earthquake/event_<i>.mseed
@@ -35,12 +35,12 @@ EVENT_LIMIT        = int(os.getenv("EVENT_LIMIT", 300))
 WAVEFORM_PRE_SEC   = int(os.getenv("WAVEFORM_PRE_SECONDS", 60))
 WAVEFORM_POST_SEC  = int(os.getenv("WAVEFORM_POST_SECONDS", 240))
 NOISE_COUNT        = int(os.getenv("NOISE_COUNT", 200))
-NOISE_WINDOW_SEC   = WAVEFORM_PRE_SEC + WAVEFORM_POST_SEC  # 300 s, same length as earthquake windows
+NOISE_WINDOW_SEC   = WAVEFORM_PRE_SEC + WAVEFORM_POST_SEC  # 300s, same length as earthquake windows
 
 EARTHQUAKE_DIR     = os.getenv("EARTHQUAKE_DIR", "data/earthquake")
 NOISE_DIR          = os.getenv("NOISE_DIR", "data/noise")
 CATALOG_FILE       = os.getenv("CATALOG_FILE", "earthquake_catalog.xml")
-NOISE_BUFFER_SEC   = int(os.getenv("NOISE_BUFFER_SEC", 600))  # ±10 min around any event
+NOISE_BUFFER_SEC   = int(os.getenv("NOISE_BUFFER_SEC", 600))  # ~10 min around any event
 
 TARGET_EARTHQUAKE  = 200   # stop early once we have this many
 TARGET_NOISE       = 200
@@ -86,7 +86,7 @@ def download_catalog(client):
     return catalog
 
 
-# Phase 1b: Download earthquake waveforms
+# Download earthquake waveforms
 def download_earthquakes(client, catalog):
     existing = count_existing(EARTHQUAKE_DIR, "event_")
     if existing >= TARGET_EARTHQUAKE:
@@ -130,7 +130,7 @@ def download_earthquakes(client, catalog):
     print(f"[earthquakes] Done — {downloaded} downloaded, {skipped} skipped.")
 
 
-# Phase 1c: Download noise waveforms
+# Download noise waveforms
 def build_event_times(catalog):
     """Extract all origin times from a catalog as a sorted list."""
     times = []
