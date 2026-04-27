@@ -4,6 +4,7 @@
 # Data files
 data/
 models/
+submissions/
 *.mseed
 *.xml
 
@@ -19,3 +20,6 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+
+seismic_project_roadmap_new.md
+seismic_project_roadmap.md

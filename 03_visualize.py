@@ -33,8 +33,8 @@ SAMPLES_PER_CLASS = 3     # number of waveforms shown in the spectrogram grid
 FREQ_MAX_HZ       = 20.0  # cap y-axis on spectrograms (seismic range of interest)
 
 # consistent class colors used across all plots
-COLOR_EQ    = "#d62728"   # red    — earthquake
-COLOR_NOISE = "#1f77b4"   # blue   — noise
+COLOR_EQ    = "#d62728"   # red - earthquake
+COLOR_NOISE = "#1f77b4"   # blue - noise
 
 
 # Helpers
@@ -223,7 +223,7 @@ def plot_feature_histograms(df):
 
 # Plot 4: Spectral Feature Scatter
 def plot_spectral_scatter(df):
-    x_col = "energy_1p0_5p0hz"   # core seismic detection band
+    x_col = "energy_1p0_5p0hz"   # seismic detection band
     y_col = "energy_0p1_1p0hz"   # surface wave / long-period band
 
     if x_col not in df.columns or y_col not in df.columns:
