@@ -407,7 +407,7 @@ def _save(fig, filename):
     print(f"[saved] {path}")
 
 
-# Classifier result plots (08-15) — data provided by 04_classify.py
+# Classifier result plots — data provided by 04_classify.py
 def plot_roc_curves(results):
     fig, ax = plt.subplots(figsize=(9, 6))
     for res, color in zip(results, PALETTE):

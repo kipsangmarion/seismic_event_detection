@@ -40,7 +40,7 @@ NOISE_WINDOW_SEC   = WAVEFORM_PRE_SEC + WAVEFORM_POST_SEC  # 300s, same length a
 EARTHQUAKE_DIR     = os.getenv("EARTHQUAKE_DIR", "data/earthquake")
 NOISE_DIR          = os.getenv("NOISE_DIR", "data/noise")
 CATALOG_FILE       = os.getenv("CATALOG_FILE", "earthquake_catalog.xml")
-NOISE_BUFFER_SEC   = int(os.getenv("NOISE_BUFFER_SEC", 600))  # ~10 min around any event
+NOISE_BUFFER_SEC   = int(os.getenv("NOISE_BUFFER_SEC", 600))  # 10 min around any event
 
 TARGET_EARTHQUAKE  = 200   # stop early once we have this many
 TARGET_NOISE       = 200

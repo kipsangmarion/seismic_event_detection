@@ -109,7 +109,7 @@ def main():
 
     df = pd.DataFrame(rows)
 
-    # Outlier removal — IQR method on max_amplitude.
+    # Outlier removal - IQR method on max_amplitude.
     # More robust than Z-score for right-skewed amplitude distributions.
     # Flags samples where max_amplitude > Q3 + 3*IQR (conservative upper fence).
     q1, q3      = df["max_amplitude"].quantile(0.25), df["max_amplitude"].quantile(0.75)

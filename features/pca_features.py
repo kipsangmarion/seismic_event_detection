@@ -2,7 +2,7 @@
 features/pca_features.py
 Method 3 (Automatic): PCA on padded/truncated raw waveform vectors.
 
-No domain knowledge is used - PCA finds the directions of maximum variance
+PCA finds the directions of maximum variance
 across all waveforms. The top components capture patterns a human might
 not think to hand-engineer.
 
@@ -31,12 +31,12 @@ def fit_pca(waveforms, waveform_length, n_components, models_dir="models"):
 
     Parameters
     waveforms      : list of 1-D np.ndarray  (raw sample values)
-    waveform_length: int   — fixed length to pad/truncate each waveform to
-    n_components   : int   — number of PCA components to keep
-    models_dir     : str   — directory where scaler.pkl and pca_model.pkl are saved
+    waveform_length: int   - fixed length to pad/truncate each waveform to
+    n_components   : int   - number of PCA components to keep
+    models_dir     : str   - directory where scaler.pkl and pca_model.pkl are saved
 
     Returns
-    dict[str, np.ndarray]  — keys are "pc1", "pc2", ..., "pc{n_components}"
+    dict[str, np.ndarray]  - keys are "pc1", "pc2", ..., "pc{n_components}"
     """
     X = np.array([pad_or_truncate(w, waveform_length) for w in waveforms])
 
